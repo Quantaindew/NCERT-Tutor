@@ -30,7 +30,7 @@ async def startup_handler(ctx: Context):
 
 @ncert.on_query(model=Question)
 async def question_handler(ctx: Context, sender: str, query: Question):
-    api_url = "https://ncert-tutor-dev-dbkt.3.us-1.fl0.io/generate_url"
+    api_url = "https://ncert-tutor-dev-dbkt.3.us-1.fl0.io/send-pdf-content"
     payload = {
         "standard": query.standard,
         "subject": query.subject,

@@ -36,6 +36,7 @@ class Error(Model):
 
 
 class Data(Model):
+    response
     value: float
     unit: str
     timestamp: str
@@ -68,7 +69,7 @@ def get_completion(context: str, prompt: str, max_tokens: int = 1024):
 # Instruct the AI model to retrieve data and context for the data and return it in machine readable JSON format
 def get_data(ctx: Context, request: str):
     context = '''    
-    You are a helpful NCERT Tutor agent who can provide answers to questions along with sources and relevant context in a machine readable format.
+    You are a helpful NCERT Tutor agent who will summarize a given chapter from NCERT and respond with a summary and a question bank.
     
     Please follow these guidelines:
     1. Try to answer the question as accurately as possible, using only reliable sources.
