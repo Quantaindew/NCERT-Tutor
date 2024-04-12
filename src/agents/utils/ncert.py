@@ -25,7 +25,8 @@ def generate_url(class_num, subject, chapter_num):
             8: 'hd',
             9: 'be',
             10: 'ff',
-        }
+        },
+        'evs':'ap',
     }
     
     class_str = class_mapping.get(class_num, '')

@@ -10,7 +10,7 @@ class Response(Model):
     text: str
 
 class Message(Model):
-    message: str = Field(description="Your Message.")
+    message: str = Field(description="Your Message.") 
 
 
 agent = Agent(
