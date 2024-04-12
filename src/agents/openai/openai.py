@@ -15,8 +15,7 @@ import requests
 import uagents
 from uagents import Agent, Context, Model
 
-if OPENAI_API_KEY == "YOUR_OPENAI_API_KEY":
-    raise Exception("You need to provide an API key for OPEN AI to use this example")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
 # Configuration for making requests to OPEN AI 
 OPENAI_URL = "https://api.openai.com/v1/chat/completions"
@@ -105,6 +104,7 @@ async def handle_request(ctx: Context, request: Text):
     # Serialize the dictionary to a JSON string
     request_json = json.dumps(request_dict)
     response = get_data(ctx, f"{request_json}") 
-    sender = ""
-    await ctx.send(sender, Response(summary=response.summary, question_bank=response.question_bank, answer_key=response.answer_key))
+    ctx.logger.info(f"Sending response: {response}")
+    #sender = ""
+    #await ctx.send(sender, Response(summary=response.summary, question_bank=response.question_bank, answer_key=response.answer_key))
     
