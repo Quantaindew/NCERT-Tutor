@@ -1,6 +1,8 @@
-from flask import Flask, request, jsonify
+import json
 
-app = Flask(__name__)
+from fastapi import FastAPI
+
+app = FastAPI()
 
 def generate_url(class_num, subject, chapter_num):
     class_mapping = {9: 'ie', 10: 'je',8:'he',7:'ge',6:'fe',5:'ee',4:'de',3:'ce',2:'be',1:'ae'}
@@ -36,7 +38,7 @@ def generate_url(class_num, subject, chapter_num):
     else:
         return "Invalid input"
 
-@app.route('/generate_url', methods=['POST'])
+@app.post('/generate_url')
 def generate_url_api():
     data = request.get_json()
     class_num = data.get('class')
@@ -46,7 +48,7 @@ def generate_url_api():
     url = generate_url(class_num, subject, chapter_num)
     return jsonify({'url': url})
 
-@app.route('/', methods=['GET'])
+@app.get('/')
 def home():
     instructions = """
     # Usage instructions for the endpoint 
@@ -65,5 +67,4 @@ def home():
     return instructions
 
 
-if __name__ == '__main__':
-    app.run(debug=True,port=8080)
+
