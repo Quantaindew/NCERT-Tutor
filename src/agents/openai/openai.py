@@ -9,20 +9,26 @@
 #
 # To use this example, you will need to provide an API key for OPEN AI: https://platform.openai.com/account/api-keys
 # You can define your OPENAI_API_KEY value in the .env file
+
+import os 
+import requests
+import uagents
+from uagents import Agent, Context, Model
+
 if OPENAI_API_KEY == "YOUR_OPENAI_API_KEY":
     raise Exception("You need to provide an API key for OPEN AI to use this example")
 
 # Configuration for making requests to OPEN AI 
 OPENAI_URL = "https://api.openai.com/v1/chat/completions"
-MODEL_ENGINE = "gpt-3.5-turbo"
+MODEL_ENGINE = "gpt-4-turbo"
 HEADERS = {
     "Content-Type": "application/json",
     "Authorization": f"Bearer {OPENAI_API_KEY}"
 }
 
 
-class Request(Model):
-    text: str
+class ChapterUrl(Model):
+    url: str
 
 
 class Error(Model):
@@ -62,7 +68,7 @@ def get_completion(context: str, prompt: str, max_tokens: int = 1024):
 # Instruct the AI model to retrieve data and context for the data and return it in machine readable JSON format
 def get_data(ctx: Context, request: str):
     context = '''    
-    You are a helpful agent who can provide answers to questions along with sources and relevant context in a machine readable format.
+    You are a helpful NCERT Tutor agent who can provide answers to questions along with sources and relevant context in a machine readable format.
     
     Please follow these guidelines:
     1. Try to answer the question as accurately as possible, using only reliable sources.
@@ -87,8 +93,8 @@ def get_data(ctx: Context, request: str):
         return Error(text="Sorry, I wasn't able to answer your request this time. Feel free to try again.")
 
 # Message handler for data requests sent to this agent
-@agent.on_message(model=Request)
-async def handle_request(ctx: Context, sender: str, request: Request):
+@agent.on_message(model=ChapterUrl)
+async def handle_request(ctx: Context, sender: str, request: ChapterUrl):
     ctx.logger.info(f"Got request from {sender}: {request.text}")
     response = get_data(ctx, request.text)
     await ctx.send(sender, response)
