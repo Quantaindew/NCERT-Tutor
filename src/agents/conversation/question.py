@@ -19,9 +19,9 @@ agent = Agent(
 # Define Question Reading Model
 class Question(Model):
     question : str
-    chapter: str
-    subject: str
-    standard: str
+    chapter: int
+    subject: int
+    standard: int
 
 class ChapterUrl(Model):
     url: str 
@@ -36,7 +36,7 @@ fund_agent_if_low(ncert.wallet.address())
 async def on_question_request(ctx: Context, sender: str, msg: Question):
     #Printing the question response on logger
     ctx.logger.info(f"Received question request from {sender} with title: {msg.question}")
-    await ctx.send("agent1qvwqu6a0km09mq4f6j6kmke9smswmgcergmml9a54av9449rqtmmxy4qwe6", Question(question = msg.question, chapter = msg.chapter, subject = msg.subject, standard = msg.standard))
+    await ctx.send("agent1q26wap4wv5fwteg3y6zkcnsxgg9argekfmcp2z2fdv9dek5xrkhu2e5z8zu", Question(question = msg.question, chapter = msg.chapter, subject = msg.subject, standard = msg.standard))
     #Creating hyperlink and sending final response to the DeltaV GUI
     message = f"you asked for help with chapter: {msg.chapter} from {msg.standard} in {msg.subject}"
     await ctx.send(sender, UAgentResponse(message = message, type = UAgentResponseType.FINAL))

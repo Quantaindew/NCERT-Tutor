@@ -4,9 +4,9 @@ import requests
 
 class Question(Model):
     question: str
-    chapter: str
-    subject: str
-    standard: str
+    chapter: int
+    subject: int
+    standard: int
 
 class Text(Model):
     pdf: str
@@ -41,7 +41,6 @@ async def question_handler(ctx: Context, sender: str, query: Question):
             "standard": query.standard,
             "subject": query.subject,
             "chapter": query.chapter,
-            "question": query.question,
         }
         response = await requests.post(api_url, json=payload)
         data = response.json()

@@ -39,8 +39,8 @@ class Text(Model):
 #class based on {"summary": "summary", "question_bank": ["question_1","question_2",...], answer_key:["answer_1","answer_2",...]}
 class Response(Model):
     summary: str
-    question_bank: list
-    answer_key: list
+    question_bank: str
+    answer_key: str
 
 # Send a prompt and context to the AI model and return the content of the completion
 def get_completion(context: str, prompt: str):
@@ -74,10 +74,10 @@ def get_data(ctx: Context, request: str):
     2. Take in consideration the standard, subject, chapter, and question given.
     3. Provide a detailed summary of the chapter.
     4. Create a question bank with answers to the questions.
-    5. Provide the information in the exact JSON format: {"summary": "summary", "question_bank": ["question_1","question_2",...], answer_key:["answer_1","answer_2",...]}
+    5. Provide the information in the exact JSON format: {"summary": "summary", "question_bank": "question_1,question_2,...", answer_key:"answer_1,answer_2,..."}
         - summary is the summary of the chapter given
-        - question bank is a list of questions from the chapter
-        - answer key is a list of answers to the questions made from the chapter
+        - question bank is a newlined string of questions from the chapter
+        - answer key is a newlined string of answers to the questions made from the chapter
     '''
 
     response = get_completion(context, request)
