@@ -18,6 +18,9 @@ agent = Agent(
 # Define Question Reading Model
 class Question(Model):
     question : str
+    chapter: str
+    subject: str
+    standard: str
  
 # Define Protocol for question reading system
 question_protocol = Protocol("Question System")
