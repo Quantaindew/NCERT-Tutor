@@ -41,7 +41,7 @@ async def question_handler(ctx: Context, sender: str, query: Question):
             "standard": query.standard,
             "subject": query.subject,
             "chapter": query.chapter,
-            "question": query.question
+            "question": query.question,
         }
         response = await requests.post(api_url, json=payload)
         data = response.json()
