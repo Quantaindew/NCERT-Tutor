@@ -1,6 +1,11 @@
 import json
 from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException
+import requests
+from PyPDF4 import PdfFileReader
+
+from io import BytesIO
+
 
 app = FastAPI()
 
@@ -44,15 +49,29 @@ def generate_url(class_num, subject, chapter_num):
     else:
         return "Invalid input"
 
-@app.post('/generate_url')
+@app.post('/send-pdf-content')
 def generate_url_api(request_data: Request):
     try:
         url = generate_url(request_data.standard, request_data.subject, request_data.chapter)
         if not url:
             raise ValueError("Generated URL is empty or invalid.")
+        
+        # Download the PDF
+        response = requests.get(url)
+        response.raise_for_status()
+
+        # Read the PDF
+        reader = PdfFileReader(BytesIO(response.content))
+
+        # Extract the text
+        text = ""
+        for page in range(reader.getNumPages()):
+            text += reader.getPage(page).extractText()
+
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-    return {"url": url}
+    
+    return {"content": text}
 @app.get('/')
 def home():
     instructions = """

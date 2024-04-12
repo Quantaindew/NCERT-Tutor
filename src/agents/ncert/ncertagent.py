@@ -8,6 +8,14 @@ class Question(Model):
     subject: str
     standard: str
 
+class Text(Model):
+    pdf: str
+    success: bool
+    question: str
+    chapter: str
+    subject: str
+    standard: str
+
 
 ncert = Agent(
     name="ncert",
@@ -27,16 +35,20 @@ async def startup_handler(ctx: Context):
 
 @ncert.on_query(model=Question)
 async def question_handler(ctx: Context, sender: str, query: Question):
-    api_url = "https://ncert-tutor-dev-dbkt.3.us-1.fl0.io/generate_url"
-    payload = {
-        "standard": query.standard,
-        "subject": query.subject,
-        "chapter": query.chapter,
-        "question": query.question
-    }
-    response = requests.post(api_url, json=payload)
-    return response.json()
-
+    try:
+        api_url = "https://ncert-tutor-dev-dbkt.3.us-1.fl0.io/send-pdf-content"
+        payload = {
+            "standard": query.standard,
+            "subject": query.subject,
+            "chapter": query.chapter,
+            "question": query.question
+        }
+        response = await requests.post(api_url, json=payload)
+        data = response.json()
+        sender = ""
+        ctx.send(sender, Text(pdf=data, success=True, question=query.question, chapter=query.chapter, subject=query.subject, standard=query.standard))
+    except Exception as e:
+        ctx.send(sender, Text(pdf=str(e), success=False))
 
 if __name__ == "__main__":
     ncert.run()
