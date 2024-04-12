@@ -20,7 +20,7 @@ agent = Agent(
 class Question(Model):
     question : str
     chapter: int
-    subject: int
+    subject: str
     standard: int
 
 class ChapterUrl(Model):
@@ -31,11 +31,17 @@ question_protocol = Protocol("Question System")
  
 fund_agent_if_low(ncert.wallet.address())
 
+@agent.on_event("startup")
+async def startup(ctx: Context):
+    ctx.logger.info("Question System Agent Started")
+    ctx.logger.info(f"{agent.address}")
+
 # Define a handler for the Question system protocol
 @question_protocol.on_message(model=Question, replies = UAgentResponse)
 async def on_question_request(ctx: Context, sender: str, msg: Question):
     #Printing the question response on logger
-    ctx.logger.info(f"Received question request from {sender} with title: {msg.question}")
+    ctx.logger.info(f"Received question request from {sender}")
+    ctx.logger.info(f"Question: {msg.question}, Chapter: {msg.chapter}, Subject: {msg.subject}, Standard: {msg.standard}")
     await ctx.send("agent1q26wap4wv5fwteg3y6zkcnsxgg9argekfmcp2z2fdv9dek5xrkhu2e5z8zu", Question(question = msg.question, chapter = msg.chapter, subject = msg.subject, standard = msg.standard))
     #Creating hyperlink and sending final response to the DeltaV GUI
     message = f"you asked for help with chapter: {msg.chapter} from {msg.standard} in {msg.subject}"

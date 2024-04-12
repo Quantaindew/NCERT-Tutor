@@ -105,7 +105,7 @@ async def handle_request(ctx: Context, sender: str, request: Text):
     # Serialize the dictionary to a JSON string
     request_json = json.dumps(request_dict)
     response = get_data(ctx, f"{request_json}") 
-    ctx.logger.info(f"Sending response: {response}")
+    ctx.logger.info(f"Sending response: {response.summary} \n {response.question_bank} \n {response.answer_key}")
     #sender = ""
     #await ctx.send(sender, Response(summary=response.summary, question_bank=response.question_bank, answer_key=response.answer_key))
     

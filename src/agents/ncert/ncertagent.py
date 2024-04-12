@@ -5,7 +5,7 @@ import requests
 class Question(Model):
     question: str
     chapter: int
-    subject: int
+    subject: str
     standard: int
 
 class Text(Model):
@@ -44,8 +44,9 @@ async def question_handler(ctx: Context, sender: str, query: Question):
         }
         response = await requests.post(api_url, json=payload)
         data = response.json()
-        sender = ""
-        ctx.send(sender, Text(pdf=data, success=True, question=query.question, chapter=query.chapter, subject=query.subject, standard=query.standard))
+        sender = "agent1q2u5ud7nznd85kwtm37gju0pd0hnywmawfweg4zkww3gpd0trn9sc9sl2qh"
+        ctx.logger.info(data.content)
+        ctx.send(sender, Text(pdf=data.content, success=True, question=query.question, chapter=query.chapter, subject=query.subject, standard=query.standard))
     except Exception as e:
         ctx.send(sender, Text(pdf=str(e), success=False))
 
