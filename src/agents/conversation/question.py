@@ -5,6 +5,7 @@
  
 # Import required libraries
 import requests
+import uagents, Model, Protocol, Agent, Context
 from ai_engine import UAgentResponse, UAgentResponseType
  
 # Define Question Reading Model
