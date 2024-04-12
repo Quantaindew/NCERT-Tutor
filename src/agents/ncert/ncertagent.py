@@ -9,7 +9,7 @@ class Question(Model):
     standard: str
 
 class Text(Model):
-    text: str
+    pdf: str
     success: bool
     question: Question()
 
@@ -43,9 +43,9 @@ async def question_handler(ctx: Context, sender: str, query: Question):
         response = await requests.post(api_url, json=payload)
         data = response.json()
         sender = ""
-        ctx.send(sender, Text(text=data, success=True, question=query))
+        ctx.send(sender, Text(pdf=data, success=True, question=query))
     except Exception as e:
-        ctx.send(sender, Text(text=str(e), success=False))
+        ctx.send(sender, Text(pdf=str(e), success=False))
 
 if __name__ == "__main__":
     ncert.run()

@@ -27,32 +27,36 @@ HEADERS = {
 }
 
 
-class ChapterUrl(Model):
-    url: str
-
 
 class Error(Model):
     text: str
 
+class Question(Model):
+    question: str
+    chapter: str
+    subject: str
+    standard: str
 
-class Data(Model):
-    response : str
-    value: float
-    unit: str
-    timestamp: str
-    confidence: float
-    source: str
-    notes: str
+class Text(Model):
+    pdf: str
+    success: bool
+    question: Question
+
+#class based on {"summary": "summary", "question_bank": ["question_1","question_2",...], answer_key:["answer_1","answer_2",...]}
+class Response(Model):
+    summary: str
+    question_bank: list
+    answer_key: list
 
 # Send a prompt and context to the AI model and return the content of the completion
-def get_completion(context: str, prompt: str, max_tokens: int = 1024):
+def get_completion(context: str, prompt: str):
     data = {
         "model": MODEL_ENGINE,
+        "response_format": "json",
         "messages": [
             {"role": "system", "content": context},
             {"role": "user", "content": prompt},
-        ],
-        "max_tokens": max_tokens,
+        ]
     }
 
     try:
@@ -72,31 +76,35 @@ def get_data(ctx: Context, request: str):
     You are a helpful NCERT Tutor agent who will summarize a given chapter from NCERT and respond with a summary and a question bank with answers.
     
     Please follow these guidelines:
-    1. Try to answer the question as accurately as possible, using only reliable sources like the ones provided as context.
-    2. Take in consideration the .
-    3. In the last line of your response, provide the information in the exact JSON format: {"value": value, "unit": unit, "timestamp": time, "confidence": rating, "source": ref, "notes": summary}
-        - value is the numerical value of the data without any commas or units
-        - unit is the measurement unit of the data if applicable, or an empty string if not applicable
-        - time is the approximate timestamp when this value was published in ISO 8601 format
-        - rating is your confidence rating of the data from 0 to 1
-        - ref is a url where the data can be found, or a citation if no url is available
-        - summary is a brief justification for the confidence rating (why you are confident or not confident in the accuracy of the value)
+    1. Try to answer the question as accurately as possible, using only reliable sources like the ones provided as .
+    2. Take in consideration the standard, subject, chapter, and question given.
+    3. Provide a detailed summary of the chapter.
+    4. Create a question bank with answers to the questions.
+    5. Provide the information in the exact JSON format: {"summary": "summary", "question_bank": ["question_1","question_2",...], answer_key:["answer_1","answer_2",...]}
+        - summary is the summary of the chapter given
+        - question bank is a list of questions from the chapter
+        - answer key is a list of answers to the questions made from the chapter
     '''
 
-    response = get_completion(context, request, max_tokens=3200)
+    response = get_completion(context, request)
 
     try:
-        data = json.loads(response.splitlines()[-1])
-        msg = Data.parse_obj(data)
-        return msg
+        ## try to convert response to json
+        data = json.loads(response)
+        ##return json data
+        return data
     except Exception as ex:
         ctx.logger.exception(f"An error occurred retrieving data from the AI model: {ex}")
         return Error(text="Sorry, I wasn't able to answer your request this time. Feel free to try again.")
 
 # Message handler for data requests sent to this agent
-@agent.on_message(model=ChapterUrl)
-async def handle_request(ctx: Context, sender: str, request: ChapterUrl):
-    ctx.logger.info(f"Got request from {sender}: {request.text}")
-    response = get_data(ctx, request.text)
-    await ctx.send(sender, response)
+@agent.on_message(model=Text)
+async def handle_request(ctx: Context, request: Text):
+    ctx.logger.info(f"Got request from {sender}: {request.success}")
+    request_dict = request.to_dict()
+    # Serialize the dictionary to a JSON string
+    request_json = json.dumps(request_dict)
+    response = get_data(ctx, f"{request_json}") 
+    sender = ""
+    await ctx.send(sender, Response(summary=response.summary, question_bank=response.question_bank, answer_key=response.answer_key))
     
