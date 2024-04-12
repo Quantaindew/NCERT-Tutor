@@ -34,3 +34,6 @@ async def on_question_request(ctx: Context, sender: str, msg: Question):
  
 # Include the Generate Question protocol in your agent
 agent.include(question_protocol)
+
+if "__name__" = = "__main__":
+    agent.run()
