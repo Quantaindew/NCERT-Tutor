@@ -11,7 +11,10 @@ class Question(Model):
 class Text(Model):
     pdf: str
     success: bool
-    question: Question()
+    question: str
+    chapter: str
+    subject: str
+    standard: str
 
 
 ncert = Agent(
@@ -43,7 +46,7 @@ async def question_handler(ctx: Context, sender: str, query: Question):
         response = await requests.post(api_url, json=payload)
         data = response.json()
         sender = ""
-        ctx.send(sender, Text(pdf=data, success=True, question=query))
+        ctx.send(sender, Text(pdf=data, success=True, question=query.question, chapter=query.chapter, subject=query.subject, standard=query.standard))
     except Exception as e:
         ctx.send(sender, Text(pdf=str(e), success=False))
 

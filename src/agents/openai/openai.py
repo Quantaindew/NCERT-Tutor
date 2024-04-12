@@ -1,19 +1,7 @@
-
-# Here we demonstrate how an agent can respond to plain text questions with data from an AI model and convert it into a machine readable format.
-# Note: the AI model used here is not actually able to verify its information and is not guaranteed to be correct. The purpose of this example is to show how to interact with such a model.
-#
-# In this example we will use:
-# - 'agent': this is your instance of the 'Agent' class that we will give an 'on_interval' task
-# - 'ctx': this is the agent's 'Context', which gives you access to all the agent's important functions
-# - 'requests': this is a module that allows you to make HTTP requests
-#
-# To use this example, you will need to provide an API key for OPEN AI: https://platform.openai.com/account/api-keys
-# You can define your OPENAI_API_KEY value in the .env file
-
 import os 
 import requests
-import uagents
 from uagents import Agent, Context, Model
+from uagents.setup import fund_agent_if_low
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
@@ -27,19 +15,26 @@ HEADERS = {
 
 
 
+agent = Agent(
+    name="OpenAI Agent",
+    seed="your_agent_seed_hereasdasda",
+    port=8001,
+    endpoint=["http://127.0.0.1:8001/submit"],
+)
+
+fund_agent_if_low(agent.wallet.address())
+
 class Error(Model):
     text: str
 
-class Question(Model):
+class Text(Model):
+    pdf: str
+    success: bool
     question: str
     chapter: str
     subject: str
     standard: str
 
-class Text(Model):
-    pdf: str
-    success: bool
-    question: Question
 
 #class based on {"summary": "summary", "question_bank": ["question_1","question_2",...], answer_key:["answer_1","answer_2",...]}
 class Response(Model):
@@ -96,9 +91,15 @@ def get_data(ctx: Context, request: str):
         ctx.logger.exception(f"An error occurred retrieving data from the AI model: {ex}")
         return Error(text="Sorry, I wasn't able to answer your request this time. Feel free to try again.")
 
+
+@agent.on_event("startup")
+async def startup(ctx: Context):
+    ctx.logger.info("OpenAI Agent Started")
+    ctx.logger.info(f"{agent.address}")
+
 # Message handler for data requests sent to this agent
 @agent.on_message(model=Text)
-async def handle_request(ctx: Context, request: Text):
+async def handle_request(ctx: Context, sender: str, request: Text):
     ctx.logger.info(f"Got request from {sender}: {request.success}")
     request_dict = request.to_dict()
     # Serialize the dictionary to a JSON string
@@ -108,3 +109,5 @@ async def handle_request(ctx: Context, request: Text):
     #sender = ""
     #await ctx.send(sender, Response(summary=response.summary, question_bank=response.question_bank, answer_key=response.answer_key))
     
+if __name__ == "__main__":
+    agent.run()
