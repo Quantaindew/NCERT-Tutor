@@ -1,8 +1,13 @@
 import json
-
-from fastapi import FastAPI
+from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
+
+class Request(BaseModel):
+    standard: int
+    subject: str
+    chapter: int
 
 def generate_url(class_num, subject, chapter_num):
     class_mapping = {9: 'ie', 10: 'je',8:'he',7:'ge',6:'fe',5:'ee',4:'de',3:'ce',2:'be',1:'ae'}
@@ -39,15 +44,14 @@ def generate_url(class_num, subject, chapter_num):
         return "Invalid input"
 
 @app.post('/generate_url')
-def generate_url_api():
-    data = request.get_json()
-    class_num = data.get('class')
-    subject = data.get('subject')
-    chapter_num = data.get('chapter')
-    
-    url = generate_url(class_num, subject, chapter_num)
-    return jsonify({'url': url})
-
+def generate_url_api(request_data: Request):
+    try:
+        url = generate_url(request_data.standard, request_data.subject, request_data.chapter)
+        if not url:
+            raise ValueError("Generated URL is empty or invalid.")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    return {"url": url}
 @app.get('/')
 def home():
     instructions = """
