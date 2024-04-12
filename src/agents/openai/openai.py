@@ -36,7 +36,7 @@ class Error(Model):
 
 
 class Data(Model):
-    response
+    response : str
     value: float
     unit: str
     timestamp: str
@@ -69,11 +69,11 @@ def get_completion(context: str, prompt: str, max_tokens: int = 1024):
 # Instruct the AI model to retrieve data and context for the data and return it in machine readable JSON format
 def get_data(ctx: Context, request: str):
     context = '''    
-    You are a helpful NCERT Tutor agent who will summarize a given chapter from NCERT and respond with a summary and a question bank.
+    You are a helpful NCERT Tutor agent who will summarize a given chapter from NCERT and respond with a summary and a question bank with answers.
     
     Please follow these guidelines:
-    1. Try to answer the question as accurately as possible, using only reliable sources.
-    2. Rate your confidence in the accuracy of your answer from 0 to 1 based on the credibility of the data publisher and how much it might have changed since the publishing date.
+    1. Try to answer the question as accurately as possible, using only reliable sources like the ones provided as context.
+    2. Take in consideration the .
     3. In the last line of your response, provide the information in the exact JSON format: {"value": value, "unit": unit, "timestamp": time, "confidence": rating, "source": ref, "notes": summary}
         - value is the numerical value of the data without any commas or units
         - unit is the measurement unit of the data if applicable, or an empty string if not applicable
@@ -83,7 +83,7 @@ def get_data(ctx: Context, request: str):
         - summary is a brief justification for the confidence rating (why you are confident or not confident in the accuracy of the value)
     '''
 
-    response = get_completion(context, request, max_tokens=2048)
+    response = get_completion(context, request, max_tokens=3200)
 
     try:
         data = json.loads(response.splitlines()[-1])

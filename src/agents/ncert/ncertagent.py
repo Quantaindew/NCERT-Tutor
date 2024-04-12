@@ -11,6 +11,7 @@ class Question(Model):
 class Text(Model):
     text: str
     success: bool
+    question: Question()
 
 
 ncert = Agent(
@@ -42,7 +43,7 @@ async def question_handler(ctx: Context, sender: str, query: Question):
         response = await requests.post(api_url, json=payload)
         data = response.json()
         sender = ""
-        ctx.send(sender, Text(text=data, success=True))
+        ctx.send(sender, Text(text=data, success=True, question=query))
     except Exception as e:
         ctx.send(sender, Text(text=str(e), success=False))
 
