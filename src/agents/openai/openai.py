@@ -2,12 +2,13 @@ import os
 import requests
 from uagents import Agent, Context, Model
 from uagents.setup import fund_agent_if_low
+import json
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
+
 # Configuration for making requests to OPEN AI 
 OPENAI_URL = "https://api.openai.com/v1/chat/completions"
-MODEL_ENGINE = "gpt-4-turbo"
 HEADERS = {
     "Content-Type": "application/json",
     "Authorization": f"Bearer {OPENAI_API_KEY}"
@@ -18,8 +19,8 @@ HEADERS = {
 agent = Agent(
     name="OpenAI Agent",
     seed="your_agent_seed_hereasdasda",
-    port=8001,
-    endpoint=["http://127.0.0.1:8001/submit"],
+    port=8002,
+    endpoint=["http://127.0.0.1:8002/submit"],
 )
 
 fund_agent_if_low(agent.wallet.address())
@@ -42,31 +43,7 @@ class Response(Model):
     question_bank: str
     answer_key: str
 
-# Send a prompt and context to the AI model and return the content of the completion
-def get_completion(context: str, prompt: str):
-    data = {
-        "model": MODEL_ENGINE,
-        "response_format": "json",
-        "messages": [
-            {"role": "system", "content": context},
-            {"role": "user", "content": prompt},
-        ]
-    }
-
-    try:
-        response = requests.post(OPENAI_URL, headers=HEADERS, data=json.dumps(data))
-        messages = response.json()['choices']
-        message = messages[0]['message']['content']
-    except Exception as ex:
-        return None
-
-    print("Got response from AI model: " + message)
-    return message
-
-
-# Instruct the AI model to retrieve data and context for the data and return it in machine readable JSON format
-def get_data(ctx: Context, request: str):
-    context = '''    
+context = '''    
     You are a helpful NCERT Tutor agent who will summarize a given chapter from NCERT and respond with a summary and a question bank with answers.
     
     Please follow these guidelines:
@@ -80,7 +57,37 @@ def get_data(ctx: Context, request: str):
         - answer key is a newlined string of answers to the questions made from the chapter
     '''
 
-    response = get_completion(context, request)
+MODEL="gpt-4-turbo"
+
+# Send a prompt and context to the AI model and return the content of the completion
+def query_openai_gpt(prompt):
+   
+    data = {
+        "model": MODEL,
+        "messages": [
+            {"role": "system", "content": context},
+            {"role": "user", "content": prompt}
+        ]
+    }
+
+    # Make the POST request to the OpenAI API
+    response = requests.post(OPENAI_URL, json=data, headers=HEADERS)
+
+    # Check if the request was successful
+    if response.status_code == 200:
+        # Parse the JSON response
+        response_json = response.json()
+        # Retrieve the content from the first choice in the response
+        return response_json["choices"][0]["message"]["content"]
+    else:
+        # Handle errors (e.g., invalid API key, rate limits)
+        response.raise_for_status()
+
+# Instruct the AI model to retrieve data and context for the data and return it in machine readable JSON format
+def get_data(ctx: Context, prompt: str):
+    
+
+    response = query_openai_gpt(prompt)
 
     try:
         ## try to convert response to json
@@ -98,16 +105,17 @@ async def startup(ctx: Context):
     ctx.logger.info(f"{agent.address}")
 
 # Message handler for data requests sent to this agent
-@agent.on_message(model=Text)
+@agent.on_message(model=Text, replies=Response)
 async def handle_request(ctx: Context, sender: str, request: Text):
     ctx.logger.info(f"Got request from {sender}: {request.success}")
-    request_dict = request.to_dict()
+    request_json = json.dumps(request.dict())
+    ctx.logger.info(f'Request: {request_json}')
     # Serialize the dictionary to a JSON string
-    request_json = json.dumps(request_dict)
     response = get_data(ctx, f"{request_json}") 
-    ctx.logger.info(f"Sending response: {response.summary} \n {response.question_bank} \n {response.answer_key}")
+    ctx.logger.info(f'Sending response: {response}')
     #sender = ""
     #await ctx.send(sender, Response(summary=response.summary, question_bank=response.question_bank, answer_key=response.answer_key))
-    
+    return
+
 if __name__ == "__main__":
     agent.run()

@@ -12,8 +12,8 @@ from uagents.setup import fund_agent_if_low
 agent = Agent(
     name="Question System", 
     seed="your_agent_seed_here", 
-    port=8001, 
-    endpoint="http://localhost:8001/submit"
+    port=8000, 
+    endpoint="http://localhost:8000/submit"
     )
 
 # Define Question Reading Model
@@ -29,13 +29,13 @@ class ChapterUrl(Model):
 # Define Protocol for question reading system
 question_protocol = Protocol("Question System")
  
-fund_agent_if_low(ncert.wallet.address())
+fund_agent_if_low(agent.wallet.address())
 
 @agent.on_event("startup")
 async def startup(ctx: Context):
     ctx.logger.info("Question System Agent Started")
     ctx.logger.info(f"{agent.address}")
-
+    await ctx.send("agent1qvwqu6a0km09mq4f6j6kmke9smswmgcergmml9a54av9449rqtmmxy4qwe6", Question(question = "I don't undestand the colors", chapter = 101, subject = "english", standard = 3))
 # Define a handler for the Question system protocol
 @question_protocol.on_message(model=Question, replies = UAgentResponse)
 async def on_question_request(ctx: Context, sender: str, msg: Question):
