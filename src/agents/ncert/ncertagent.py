@@ -21,7 +21,7 @@ fund_agent_if_low(ncert.wallet.address())
 
 
 @ncert.on_event("startup")
-async def startup_handler():
+async def startup_handler(ctx: Context):
     ctx.logger.info("NCERT Agent Started")
 
 @ncert.on_query(model=Question)

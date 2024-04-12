@@ -7,6 +7,7 @@
 import requests
 from uagents import Model, Protocol, Agent, Context
 from ai_engine import UAgentResponse, UAgentResponseType
+from uagents.setup import fund_agent_if_low
 
 agent = Agent(
     name="Question System", 
