@@ -25,11 +25,14 @@ class Question(Model):
 # Define Protocol for question reading system
 question_protocol = Protocol("Question System")
  
+fund_agent_if_low(ncert.wallet.address())
+
 # Define a handler for the Question system protocol
 @question_protocol.on_message(model=Question, replies = UAgentResponse)
 async def on_question_request(ctx: Context, sender: str, msg: Question):
     #Printing the question response on logger
     ctx.logger.info(f"Received question request from {sender} with title: {msg.question}")
+    await ctx.send()
     #Creating hyperlink and sending final response to the DeltaV GUI
     message = f"you asked for help with chapter: {msg.chapter} from {msg.standard} in {msg.subject}"
     await ctx.send(sender, UAgentResponse(message = message, type = UAgentResponseType.FINAL))

@@ -19,11 +19,10 @@ ncert = Agent(
 fund_agent_if_low(ncert.wallet.address())
 
 
-@ncert.on_message(model=Question)
-async def message_handler(ctx: Context, sender: str, msg: Question):
-    # Add your message handling logic here
-    pass
 
+@ncert.on_event("startup")
+async def startup_handler():
+    ctx.logger.info("NCERT Agent Started")
 
 @ncert.on_query(model=Question)
 async def question_handler(ctx: Context, sender: str, query: Question):
