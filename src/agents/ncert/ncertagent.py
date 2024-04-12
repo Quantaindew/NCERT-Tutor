@@ -38,7 +38,7 @@ async def startup_handler(ctx: Context):
 async def question_handler(ctx: Context, sender: str, query: Question):
     try:
         ctx.logger.info(f"Question received: {query.question} {query.chapter} {query.subject} {query.standard}")
-        api_url = "http://localhost:8080/send-pdf-content"
+        api_url = "https://ncert-tutor-dev-dbkt.3.us-1.fl0.io/send-pdf-content"
         payload = {
             "standard": query.standard,
             "subject": query.subject,

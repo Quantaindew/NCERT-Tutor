@@ -35,8 +35,8 @@ fund_agent_if_low(agent.wallet.address())
 async def startup(ctx: Context):
     ctx.logger.info("Question System Agent Started")
     ctx.logger.info(f"{agent.address}")
-    await ctx.send("agent1qvwqu6a0km09mq4f6j6kmke9smswmgcergmml9a54av9449rqtmmxy4qwe6", Question(question = "I don't undestand the colors", chapter = 101, subject = "english", standard = 3))
 # Define a handler for the Question system protocol
+
 @question_protocol.on_message(model=Question, replies = UAgentResponse)
 async def on_question_request(ctx: Context, sender: str, msg: Question):
     #Printing the question response on logger
