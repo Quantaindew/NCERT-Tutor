@@ -19,4 +19,4 @@ COPY ./src/agents/utils /code/
 
 # Specify the command to run your FastAPI application using Uvicorn
 # Given the project structure, adjust the Uvicorn command to reflect the correct path to main.py
-CMD ["uvicorn", "ncert:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "ncert:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "8080", "--reload"]

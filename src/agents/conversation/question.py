@@ -31,7 +31,7 @@ async def on_question_request(ctx: Context, sender: str, msg: Question):
     #Printing the question response on logger
     ctx.logger.info(f"Received question request from {sender} with title: {msg.question}")
     #Creating hyperlink and sending final response to the DeltaV GUI
-    message = f"you asked for help with chapter {msg.question}"
+    message = f"you asked for help with chapter: {msg.chapter} from {msg.standard} in {msg.subject}"
     await ctx.send(sender, UAgentResponse(message = message, type = UAgentResponseType.FINAL))
  
  
