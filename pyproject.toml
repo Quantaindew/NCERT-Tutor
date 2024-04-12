@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "ncert-tutor"
+version = "0.1.0"
+description = "NCERT Tutor integration for uagents"
+authors = ["Your Name <you@example.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11, <3.13"
+requests = "^2.31.0"
+uagents-ai-engine = "^0.1.6"
+uagents = "^0.11.0"
+
+[tool.poetry.group.dev.dependencies]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
