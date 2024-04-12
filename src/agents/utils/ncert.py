@@ -48,7 +48,7 @@ def generate_url(class_num, subject, chapter_num):
     else:
         return "Invalid input"
 
-@app.post('/generate_url')
+@app.post('/send-pdf-content')
 def generate_url_api(request_data: Request):
     try:
         url = generate_url(request_data.standard, request_data.subject, request_data.chapter)
