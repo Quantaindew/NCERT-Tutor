@@ -8,6 +8,9 @@ class Question(Model):
     subject: str
     standard: str
 
+class Text(Model):
+    text: str
+
 
 ncert = Agent(
     name="ncert",
@@ -34,9 +37,10 @@ async def question_handler(ctx: Context, sender: str, query: Question):
         "chapter": query.chapter,
         "question": query.question
     }
-    response = requests.post(api_url, json=payload)
-    return response.json()
-
+    response = await requests.post(api_url, json=payload)
+    data = response.json()
+    sender = ""
+    ctx.send(sender, Text(text=data))
 
 if __name__ == "__main__":
     ncert.run()
