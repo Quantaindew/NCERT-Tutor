@@ -7,7 +7,14 @@
 import requests
 from uagents import Model, Protocol, Agent, Context
 from ai_engine import UAgentResponse, UAgentResponseType
- 
+
+agent = Agent(
+    name="Question System", 
+    seed="your_agent_seed_here", 
+    port=8001, 
+    endpoint="http://localhost:8001/submit"
+    )
+
 # Define Question Reading Model
 class Question(Model):
     question : str
