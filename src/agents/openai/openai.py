@@ -27,7 +27,6 @@ fund_agent_if_low(agent.wallet.address())
 
 class Error(Model):
     text: str
-
 class Text(Model):
     pdf: str
     success: bool
@@ -35,6 +34,7 @@ class Text(Model):
     chapter: str
     subject: str
     standard: str
+    sender : str
 
 
 #class based on {"summary": "summary", "question_bank": ["question_1","question_2",...], answer_key:["answer_1","answer_2",...]}
