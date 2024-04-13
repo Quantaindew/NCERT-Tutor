@@ -29,6 +29,7 @@ class SharedLinkInput(BaseModel):
     summary: str
     question_bank: str
     answer_key: str
+    sender : str
 
 def generate_url(class_num, subject, chapter_num):
     class_mapping = {9: 'ie', 10: 'je',8:'he',7:'ge',6:'fe',5:'ee',4:'de',3:'ce',2:'be',1:'ae'}
