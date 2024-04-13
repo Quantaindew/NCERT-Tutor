@@ -55,6 +55,9 @@ async def question_handler(ctx: Context, sender: str, query: Question):
 
         await ctx.send(sender, Text(pdf=data, success=True, question=query.question, chapter=query.chapter, subject=query.subject, standard=query.standard))
         return
+    else:
+        ctx.logger.info("Invalid request")
+        return
    
 if __name__ == "__main__":
     ncert.run()
