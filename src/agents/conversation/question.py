@@ -17,12 +17,18 @@ agent = Agent(
     )
 
 # Define Question Reading Model
-class Question(Model):
+class Response(Model):
     question : str
     chapter: int
     subject: str
     standard: int
     sender : str
+
+class Question(Model):
+    question : str
+    chapter: int
+    subject: str
+    standard: int
 
 class End(Model):
     msg: str
@@ -45,7 +51,7 @@ async def on_question_request(ctx: Context, sender: str, msg: Question):
     #Printing the question response on logger
     ctx.logger.info(f"Received question request from {sender}")
     ctx.logger.info(f"Question: {msg.question}, Chapter: {msg.chapter}, Subject: {msg.subject}, Standard: {msg.standard}")
-    await ctx.send("agent1q26wap4wv5fwteg3y6zkcnsxgg9argekfmcp2z2fdv9dek5xrkhu2e5z8zu", Question(question = msg.question, chapter = msg.chapter, subject = msg.subject, standard = msg.standard, sender = sender))
+    await ctx.send("agent1q26wap4wv5fwteg3y6zkcnsxgg9argekfmcp2z2fdv9dek5xrkhu2e5z8zu", Response(question = msg.question, chapter = msg.chapter, subject = msg.subject, standard = msg.standard, sender = sender))
     #Creating hyperlink and sending final response to the DeltaV GUI
     message = f"you asked for help with chapter: {msg.chapter} from {msg.standard} in {msg.subject}"
     await ctx.send(sender, UAgentResponse(message = 'Hmm...', type = UAgentResponseType.FINAL))
