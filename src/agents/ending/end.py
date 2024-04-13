@@ -35,7 +35,7 @@ async def startup(ctx: Context):
    
 # Define a handler for the Question system protocol
 @end_protocol.on_message(model=Response, replies = UAgentResponse)
-async def on_question_request(ctx: Context, msg: Response):
+async def on_question_request(ctx: Context,sender: str, msg: Response):
     message = f'{msg.summary}\n{msg.question_bank}\n{msg.answer_key}'
     #Printing the question response on logger
     ctx.logger.info(f"Received question request from {sender}")
