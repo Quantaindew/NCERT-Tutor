@@ -1,6 +1,7 @@
 import os 
 import requests
 from uagents import Agent, Context, Model
+from uagents.query import query
 from uagents.setup import fund_agent_if_low
 import json
 
@@ -19,8 +20,8 @@ HEADERS = {
 agent = Agent(
     name="OpenAI Agent",
     seed="your_agent_seed_hereasdasda",
-    port=8002,
-    endpoint=["http://127.0.0.1:8002/submit"],
+    port=8005,
+    endpoint=["http://127.0.0.1:8005/submit"],
 )
 
 fund_agent_if_low(agent.wallet.address())
@@ -42,6 +43,14 @@ class Response(Model):
     summary: str
     question_bank: str
     answer_key: str
+
+class End(Model):
+    msg : str
+
+class DictToObject:
+        def __init__(self, dictionary):
+         for key, value in dictionary.items():
+                setattr(self, key, value)
 
 context = '''    
     You are a helpful NCERT Tutor agent who will summarize a given chapter from NCERT and respond with a summary and a question bank with answers.
@@ -110,12 +119,21 @@ async def handle_request(ctx: Context, sender: str, request: Text):
     ctx.logger.info(f"Got request from {sender}: {request.success}")
     request_json = json.dumps(request.dict())
     ctx.logger.info(f'Request: {request_json}')
-    # Serialize the dictionary to a JSON string
-    response = get_data(ctx, f"{request_json}") 
-    ctx.logger.info(f'Sending response: {response}')
-    #sender = ""
-    #await ctx.send(sender, Response(summary=response.summary, question_bank=response.question_bank, answer_key=response.answer_key))
-    return
+    
+    data_response = get_data(ctx, f"{request_json}") 
+    sender = "agent1qt6ehs6kqdgtrsduuzslqnrzwkrcn3z0cfvwsdj22s27kvatrxu8sy3vag0"
+  
 
+    #  Now you can access the values using the . notation by converting the dictionary to an object
+    
+
+    data = DictToObject(data_response)
+
+    #   To demonstrate access, let's print the summary
+    ctx.logger.info(f'Response: {data.summary}')
+    sender="agent1qwf80s0dqxcy6vqr2qlsyhg0jmartqvgcg70s6zr4d0rzm2te05a7fy5dy9"
+    await ctx.send(sender,Response(summary = data.summary, question_bank = data.question_bank, answer_key = data.answer_key))
+
+    return
 if __name__ == "__main__":
     agent.run()

@@ -36,7 +36,7 @@ async def startup_handler(ctx: Context):
 
 @ncert.on_query(model=Question, replies=Text)
 async def question_handler(ctx: Context, sender: str, query: Question):
-    try:
+    if query.question and query.chapter and query.subject and query.standard:
         ctx.logger.info(f"Question received: {query.question} {query.chapter} {query.subject} {query.standard}")
         api_url = "https://ncert-tutor-dev-dbkt.3.us-1.fl0.io/send-pdf-content"
         payload = {
@@ -54,9 +54,7 @@ async def question_handler(ctx: Context, sender: str, query: Question):
         ctx.logger.info(f'{data}')
 
         await ctx.send(sender, Text(pdf=data, success=True, question=query.question, chapter=query.chapter, subject=query.subject, standard=query.standard))
-    except Exception as e:
-        await ctx.send(sender, Text(pdf=str(e), success=False, question=query.question, chapter=query.chapter, subject=query.subject, standard=query.standard))
-        ctx.logger.info(e)
-    return
+        return
+   
 if __name__ == "__main__":
     ncert.run()

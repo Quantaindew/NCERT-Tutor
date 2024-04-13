@@ -23,8 +23,8 @@ class Question(Model):
     subject: str
     standard: int
 
-class ChapterUrl(Model):
-    url: str 
+class End(Model):
+    msg: str
 
 # Define Protocol for question reading system
 question_protocol = Protocol("Question System")
@@ -35,6 +35,8 @@ fund_agent_if_low(agent.wallet.address())
 async def startup(ctx: Context):
     ctx.logger.info("Question System Agent Started")
     ctx.logger.info(f"{agent.address}")
+    await ctx.send("agent1qvwqu6a0km09mq4f6j6kmke9smswmgcergmml9a54av9449rqtmmxy4qwe6", Question(question = "Can you provide a summary of the chapter 'colors' from standard 3 English?", chapter = 101, subject = "english", standard = 3))
+    
 # Define a handler for the Question system protocol
 
 @question_protocol.on_message(model=Question, replies = UAgentResponse)
@@ -45,7 +47,7 @@ async def on_question_request(ctx: Context, sender: str, msg: Question):
     await ctx.send("agent1q26wap4wv5fwteg3y6zkcnsxgg9argekfmcp2z2fdv9dek5xrkhu2e5z8zu", Question(question = msg.question, chapter = msg.chapter, subject = msg.subject, standard = msg.standard))
     #Creating hyperlink and sending final response to the DeltaV GUI
     message = f"you asked for help with chapter: {msg.chapter} from {msg.standard} in {msg.subject}"
-    await ctx.send(sender, UAgentResponse(message = message, type = UAgentResponseType.FINAL))
+    await ctx.send(sender, UAgentResponse(message = 'Hmm...', type = UAgentResponseType.FINAL))
  
  
 # Include the Generate Question protocol in your agent
