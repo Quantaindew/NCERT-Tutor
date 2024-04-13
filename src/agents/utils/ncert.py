@@ -56,6 +56,8 @@ def generate_url(class_num, subject, chapter_num):
     if subject.lower() == 'english':
         subject_str = subject_mapping['english'].get(class_num, '')
     
+    chapter_str = chapter_num
+
     if class_str and subject_str:
         url = f"https://ncert.nic.in/textbook/pdf/{class_str}{subject_str}1{chapter_str}.pdf"
         return url
