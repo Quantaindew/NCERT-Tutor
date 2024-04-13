@@ -39,7 +39,7 @@ Our project, NCERT Tutor, is designed to simplify the learning process by provid
 ## Content of PPt:
 attached ppt here 
 
-[450+ Figma Presentation Slides (Community)_compressed.pdf](https://github.com/Quantaindew/NCERT-Tutor/files/14965342/450%2B.Figma.Presentation.Slides.Community._compressed.pdf)
+file:///C:/Users/91876/Downloads/450+%20Figma%20Presentation%20Slides%20(Community)_compressed.pdf
 
 ## Technology Stack
 - Python
