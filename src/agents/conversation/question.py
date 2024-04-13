@@ -57,6 +57,7 @@ async def on_question_request(ctx: Context, sender: str, msg: Inputmod):
     await ctx.send(sender, UAgentResponse(message = 'Hmm...', type = UAgentResponseType.FINAL))
  
  
+ 
 # Include the Generate Question protocol in your agent
 agent.include(question_protocol)
 
