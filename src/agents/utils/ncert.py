@@ -1,10 +1,19 @@
 import json
+import tempfile
+import re
+
+import os
 from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException
 import requests
 from PyPDF4 import PdfFileReader
-
 from io import BytesIO
+from fastapi import UploadFile
+import cloudinary
+from cloudinary.uploader import upload
+
+with open('ncert.json') as f:
+    ncert_data = json.load(f)
 
 
 app = FastAPI()
@@ -12,7 +21,14 @@ app = FastAPI()
 class Request(BaseModel):
     standard: int
     subject: str
-    chapter: int
+    chapter: str
+
+
+
+class SharedLinkInput(BaseModel):
+    summary: str
+    question_bank: str
+    answer_key: str
 
 def generate_url(class_num, subject, chapter_num):
     class_mapping = {9: 'ie', 10: 'je',8:'he',7:'ge',6:'fe',5:'ee',4:'de',3:'ce',2:'be',1:'ae'}
@@ -30,8 +46,7 @@ def generate_url(class_num, subject, chapter_num):
             8: 'hd',
             9: 'be',
             10: 'ff',
-        },
-        'evs':'ap',
+        }
     }
     
     class_str = class_mapping.get(class_num, '')
@@ -41,9 +56,10 @@ def generate_url(class_num, subject, chapter_num):
     if subject.lower() == 'english':
         subject_str = subject_mapping['english'].get(class_num, '')
     
+    chapter_str = str(chapter_num).zfill(2) # pad with zeros to make it 2 digits
 
     if class_str and subject_str:
-        url = f"https://ncert.nic.in/textbook/pdf/{class_str}{subject_str}{chapter_num}.pdf"
+        url = f"https://ncert.nic.in/textbook/pdf/{class_str}{subject_str}1{chapter_str}.pdf"
         return url
     else:
         return "Invalid input"
@@ -71,6 +87,7 @@ def generate_url_api(request_data: Request):
         raise HTTPException(status_code=400, detail=str(e))
     
     return {"content": text}
+
 @app.get('/')
 def home():
     instructions = """
@@ -82,7 +99,7 @@ def home():
     5. Enter a JSON object with the keys 'class', 'subject', and 'chapter'. For example:
     {
         "class": 10,
-        "subject": "maths",
+        "subject": "english",
         "chapter": 2
     }
     6. Click "Send" to make the request.
@@ -90,4 +107,55 @@ def home():
     return instructions
 
 
+@app.post('/sharedlink')
+def generate_shared_link(data: SharedLinkInput):
+    # Create the HTML content
+    # Replace '?' in question_bank with '?<br>' for new lines
+    question_bank = re.sub(r'\?', '?<br>', data.question_bank)
+    # Replace numbers (greater than 1) followed by '.' in answer_key with '<br>number.' for new lines
+    answer_key = re.sub(r'(\s)([2-9]\d*\.|\d{2,}\.)', r'<br>\2', data.answer_key)
 
+    html_content = f'''
+    <html>
+    <head>
+        <style>
+            h1 {{
+                color: blue;
+            }}
+            h2 {{
+                color: green;
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>Summary</h1>
+        <p>{data.summary}</p>
+        <h2>Question Bank</h2>
+        <p>{question_bank}</p>
+        <h2>Answer Key</h2>
+        <p>{answer_key}</p>
+    </body>
+    </html>
+    '''
+
+    # ... rest of your code ...
+        # Write the HTML content to a temporary file
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as temp:
+        temp.write(html_content.encode())
+        temp_path = temp.name
+    
+   
+    try:
+        # Upload the temporary file to Cloudinary
+        cloudinary.config( 
+            cloud_name = "du91akze5", 
+            api_key = "813453114559759", 
+            api_secret = "VzDu8Be5e6dtDOvxd8EntitA4iM" 
+        )
+        response = upload(temp_path, resource_type='raw')
+    finally:
+        # Ensure the temporary file is deleted
+        os.remove(temp_path)
+    return response['secure_url']
+
+   
