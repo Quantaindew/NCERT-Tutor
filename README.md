@@ -2,15 +2,16 @@
 
 You can watch a video demo of our project: [Google Drive Video Folder](<insert link here>)
 
-## Vision of Incognito Tab
-- Automate repetitive tasks
-- Remove centralisation
-- Replacing so many applications on our mobile phone with autonomous agents
+## Vision of our project
+- To simplify and improve learning attitude and aptitude
+- To reach many students with all the help ncessary to ace thier exams
+- To simplify and have the tedious tasks of memorizing done easy with autonomous agents.
+  
 
 ## Project Information
 
 ### Abstract
-Our project, NCERT Tutor, is designed to simplify the learning process by providing a personalized tutoring experience. It asks the user for their class, subject, and chapter, fetches the corresponding chapter PDF from the NCERT website, summarizes the content, and creates notes. The agents in our project are deployed on Agentverse and are fully operational through Delta V.
+Our project, NCERT Tutor, is designed to simplify the learning process by providing a personalized tutoring experience. It asks the user for their class, subject, and chapter they want to learn or have a doubt in, fetches the corresponding chapter PDF from the NCERT website, summarizes the content, and creates notes along with important questions through a seamless interaction enabled via delta v. The agents in our project deployed on Agentverse is fully operational through Delta V.
 
 ### Agents used in our Project, aligning with Vision of Incognito Tab
 - **User Agent**
