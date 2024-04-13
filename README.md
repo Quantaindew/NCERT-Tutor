@@ -1,28 +1,33 @@
 # Incognito Tab - Goa College of Engineering NCERT Tutor Video Demo
 
-You can watch a video demo of our project: [Google Drive Video Folder](<insert link here>)
+### You can watch a video demo of our project: [Google Drive Video Folder](<insert link here>)
 
 ## Vision of our project
 - To simplify and improve learning attitude and aptitude
 - To reach many students with all the help ncessary to ace thier exams
-- To simplify and have the tedious tasks of memorizing done easy with autonomous agents.
+- To simplify and have the tedious tasks of memorizing and concept revision done easy with autonomous agents.
   
 
 ## Project Information
 
 ### Abstract
-Our project, NCERT Tutor, is designed to simplify the learning process by providing a personalized tutoring experience. It asks the user for their class, subject, and chapter they want to learn or have a doubt in, fetches the corresponding chapter PDF from the NCERT website, summarizes the content, and creates notes along with important questions through a seamless interaction enabled via delta v. The agents in our project deployed on Agentverse is fully operational through Delta V.
+Our project, NCERT Tutor, is designed to simplify the learning process by providing a personalized tutoring experience. It asks the user for their class, subject, and chapter they want to learn or have a doubt in, then fetches the corresponding chapter PDF from the NCERT website, summarizes the content, and creates notes along with important questions through a seamless interaction enabled via delta v. The agents in our project deployed on Agentverse is fully operational through Delta V.
 
 ### Agents used in our Project, aligning with Vision of Incognito Tab
-- **User Agent**
-  - Interacts with other agents based on user input query
+- **Interact Agent**
+  - The first pillar and the initiator of the entire sequence of the workflow based on the user input done through delta v.
   - Knows the preferences of the user based on previous interactions with agents
   - Aims to maximize the educational value of the user while also providing the best options towards user query
+``question.py``
 - **NCERT Content Fetcher**
-  - Fetches the chapter PDF from the NCERT website based on user input
+  - The second pillar who fetches the knowledge necessary in the form of chapter PDF from the NCERT website database based on user input.
+``ncertagent.py``
 - **Content Summarizer**
-  - Summarizes the fetched content to provide a concise overview
-
+  - The third pillar who summarizes the fetched content to provide a concise overview.
+``openai.py``
+-**Conclusive agent**
+- The final pillar of our command chain who completes the entire flow giving the user the entire analysis of the conversation, doubts and quizes done before thus concluding the pursuits of user with a fulfilling experience.
+``end.py``
 
 ### Sample Flow of our NCERT Tutor
 1. User inputs their class, subject, and chapter.
@@ -31,8 +36,10 @@ Our project, NCERT Tutor, is designed to simplify the learning process by provid
 4. Content Summarizer summarizes the content and passes it to the Note Creator.
 5. Note Creator creates notes based on the summary and presents them to the user.
 
-## Screenshots
-Screenshots will be added here.
+## Content of PPt:
+attached ppt here 
+
+[450+ Figma Presentation Slides (Community)_compressed.pdf](https://github.com/Quantaindew/NCERT-Tutor/files/14965342/450%2B.Figma.Presentation.Slides.Community._compressed.pdf)
 
 ## Technology Stack
 - Python
