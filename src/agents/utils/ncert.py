@@ -58,7 +58,7 @@ def generate_url(class_num, subject, chapter_num):
     
 
     if class_str and subject_str:
-        url = f"https://ncert.nic.in/textbook/pdf/{class_str}{subject_str}{chapter_str}.pdf"
+        url = f"https://ncert.nic.in/textbook/pdf/{class_str}{subject_str}{chapter_num}.pdf"
         return url
     else:
         return "Invalid input"
