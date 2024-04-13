@@ -36,7 +36,7 @@ async def startup(ctx: Context):
 
 
 def send_shared_link_data(data: Response) -> str:
-    url = 'https://ncert-tutor-dev-dbkt.3.us-1.fl0.io/sharedlink'
+    url = 'http://127.0.0.1:8080/sharedlink'
     response = requests.post(url, json=data.dict())
 
     if response.status_code == 200:
