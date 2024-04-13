@@ -1,6 +1,6 @@
 # Incognito Tab - Goa College of Engineering NCERT Tutor Video Demo
 
-### You can watch a video demo of our project: [Google Drive Video Folder](<insert link here>)
+### You can watch a video demo of our project: [demo video](https://drive.google.com/drive/folders/175eGJjyQfFjJ36Qk0ACPx_CXWFQbdVnE?usp=drive_link)
 
 ## Vision of our project
 - To simplify and improve learning attitude and aptitude
@@ -39,7 +39,7 @@ Our project, NCERT Tutor, is designed to simplify the learning process by provid
 ## Content of PPt:
 attached ppt here 
 
-file:///C:/Users/91876/Downloads/450+%20Figma%20Presentation%20Slides%20(Community)_compressed.pdf
+file:///C:/Users/91876/Downloads/450+%20Figma%20Presentation%20Slides%20(Community)%20(3).pdf
 
 ## Technology Stack
 - Python
