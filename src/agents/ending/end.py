@@ -15,8 +15,7 @@ agent = Agent(
     port=8003, 
     endpoint="http://localhost:8003/submit"
     )
-class SharedLinkResponse(BaseModel):
-    secure_url: str
+    
 
 class Response(Model):
     summary: str

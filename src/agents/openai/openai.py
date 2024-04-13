@@ -42,6 +42,7 @@ class Response(Model):
     summary: str
     question_bank: str
     answer_key: str
+    sender : str
 
 # Send a prompt and context to the AI model and return the content of the completion
 def get_completion(context: str, prompt: str):
@@ -108,7 +109,7 @@ async def handle_request(ctx: Context, sender: str, request: Text):
     response = get_data(ctx, f"{request_json}") 
     ctx.logger.info(f"Sending response: {response.summary} \n {response.question_bank} \n {response.answer_key}")
     sender = ""
-    await ctx.send(sender, Response(summary=response.summary, question_bank=response.question_bank, answer_key=response.answer_key))
+    await ctx.send(sender, Response(summary=response.summary, question_bank=response.question_bank, answer_key=response.answer_key, sender=response.sender))
     
 if __name__ == "__main__":
     agent.run()
