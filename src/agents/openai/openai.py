@@ -121,7 +121,6 @@ async def handle_request(ctx: Context, sender: str, request: Text):
     ctx.logger.info(f'Request: {request_json}')
     
     data_response = get_data(ctx, f"{request_json}") 
-    sender = "agent1qt6ehs6kqdgtrsduuzslqnrzwkrcn3z0cfvwsdj22s27kvatrxu8sy3vag0"
   
 
     #  Now you can access the values using the . notation by converting the dictionary to an object
