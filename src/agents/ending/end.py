@@ -21,6 +21,7 @@ class Response(Model):
     summary: str
     question_bank: str
     answer_key: str
+    sender : str
 
 # Define Protocol for question reading system
 end_protocol = Protocol("End System")
@@ -40,7 +41,7 @@ async def on_question_request(ctx: Context, sender: str, msg: Response):
     ctx.logger.info(f"Received question request from {sender}")
     ctx.logger.info(f"End Message: {message}")
     #Creating hyperlink and sending final response to the DeltaV GUI
-    await ctx.send(sender, UAgentResponse(message = message, type = UAgentResponseType.FINAL))
+    await ctx.send(msg.sender, UAgentResponse(message = message, type = UAgentResponseType.FINAL))
     return
  
 # Include the End Question protocol in your agent

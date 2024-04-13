@@ -36,21 +36,22 @@ class Text(Model):
     chapter: str
     subject: str
     standard: str
-
+    sender : str
 
 #class based on {"summary": "summary", "question_bank": ["question_1","question_2",...], answer_key:["answer_1","answer_2",...]}
 class Response(Model):
     summary: str
     question_bank: str
     answer_key: str
+    sender : str
 
 class End(Model):
     msg : str
 
-class DictToObject:
-        def __init__(self, dictionary):
-         for key, value in dictionary.items():
-                setattr(self, key, value)
+# class DictToObject:
+#         def __init__(self, dictionary):
+#          for key, value in dictionary.items():
+#                 setattr(self, key, value)
 
 context = '''    
     You are a helpful NCERT Tutor agent who will summarize a given chapter from NCERT and respond with a summary and a question bank with answers.
@@ -120,18 +121,18 @@ async def handle_request(ctx: Context, sender: str, request: Text):
     request_json = json.dumps(request.dict())
     ctx.logger.info(f'Request: {request_json}')
     
-    data_response = get_data(ctx, f"{request_json}") 
+    #data_response = get_data(ctx, f"{request_json}") 
   
 
     #  Now you can access the values using the . notation by converting the dictionary to an object
     
 
-    data = DictToObject(data_response)
+    #data = DictToObject(data_response)
 
     #   To demonstrate access, let's print the summary
-    ctx.logger.info(f'Response: {data.summary}')
+    ctx.logger.info(f'Response: {"data.summary"}')
     sender="agent1qwf80s0dqxcy6vqr2qlsyhg0jmartqvgcg70s6zr4d0rzm2te05a7fy5dy9"
-    await ctx.send(sender,Response(summary = data.summary, question_bank = data.question_bank, answer_key = data.answer_key))
+    await ctx.send(sender,Response(summary = "data.summary", question_bank = "data.question_bank", answer_key =" data.answer_key", sender = request.sender))
 
     return
 if __name__ == "__main__":

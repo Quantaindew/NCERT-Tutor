@@ -8,6 +8,7 @@ class Question(Model):
     chapter: int
     subject: str
     standard: int
+    sender : str
 
 class Text(Model):
     pdf: str
@@ -16,6 +17,7 @@ class Text(Model):
     chapter: str
     subject: str
     standard: str
+    sender : str
 
 
 ncert = Agent(
@@ -53,7 +55,7 @@ async def question_handler(ctx: Context, sender: str, query: Question):
         sender = "agent1qgpldhjj7vsp25xvnm7muw0dulzvhugf8pvpehaza82j4cw6dmc22x0m8y2"
         ctx.logger.info(f'{data}')
 
-        await ctx.send(sender, Text(pdf=data, success=True, question=query.question, chapter=query.chapter, subject=query.subject, standard=query.standard))
+        await ctx.send(sender, Text(pdf=data, success=True, question=query.question, chapter=query.chapter, subject=query.subject, standard=query.standard, sender=query.sender))
         return
     else:
         ctx.logger.info("Invalid request")
