@@ -21,7 +21,7 @@ app = FastAPI()
 class Request(BaseModel):
     standard: int
     subject: str
-    chapter: str
+    chapter: int
 
 
 
