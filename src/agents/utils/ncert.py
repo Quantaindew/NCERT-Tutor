@@ -49,7 +49,7 @@ def generate_url(class_num, subject, chapter_num):
         }
     }
     
-    class_str = class_mapping.get(class_num, '')
+    class_str = class_num
     subject_str = subject_mapping.get(subject.lower(), '')
     
     # If the subject is English, get the specific code for the class
