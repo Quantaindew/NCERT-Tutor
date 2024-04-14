@@ -30,7 +30,7 @@ class SharedLinkInput(BaseModel):
     answer_key: str
     sender : str
 
-def generate_url(class_num, subject, chapter_num):
+def generate_url(class_num, subject, chapter_num, is_pdf=True):
     class_mapping = {9: 'ie', 10: 'je',8:'he',7:'ge',6:'fe',5:'ee',4:'de',3:'ce',2:'be',1:'ae'}
     subject_mapping = {
         'science': 'sc', 
@@ -59,7 +59,10 @@ def generate_url(class_num, subject, chapter_num):
 
     if class_str and subject_str:
         url = f"https://ncert.nic.in/textbook/pdf/{class_str}{subject_str}{chapter_num}.pdf"
-        return url
+        if(is_pdf):
+            return url
+        else:
+            return f"{class_str}{subject_str}{chapter_num}"
     else:
         return "Invalid input"
 
@@ -67,26 +70,58 @@ def generate_url(class_num, subject, chapter_num):
 @app.post('/send-pdf-content')
 async def generate_url_api(request_data: Request):
     try:
-        url = generate_url(request_data.standard, request_data.subject, request_data.chapter)
-        if not url:
-            raise ValueError("Generated URL is empty or invalid.")
-        
-        # Download the PDF
-        response = requests.get(url)
-        response.raise_for_status()
-
-        # Read the PDF
-        reader = PdfFileReader(BytesIO(response.content))
-
-        # Extract the text
         text = ""
-        for page in range(reader.getNumPages()):
-            text += reader.getPage(page).extractText()
+        filename = f"./cache/{generate_url(request_data.standard, request_data.subject, request_data.chapter, False)}"
+        #check if a file with the same name exists
+        file_exists = os.path.isfile(f"{filename}.pdf")
+        txt_file_exists = os.path.isfile(f"{filename}.txt")
+        # OR operator in python is or 
+        if(file_exists or txt_file_exists):
+            # Read the file
+            if (txt_file_exists):
+                with open(f"{filename}.txt", 'r') as file:
+                    text = file.read()
+                    return {"content": text} 
+            else:
+                with open(f"{filename}.pdf", 'rb') as file:
+                    reader = PdfFileReader(file)
+                    for page in range(reader.getNumPages()):
+                        text += reader.getPage(page).extractText()
+                    ##write pdf file as txt
+                    with open(f"{filename}.txt", 'w') as file:
+                        file.write(text)
+                    return {"content": text}
+        else:
+            # Generate the URL
+            url = generate_url(request_data.standard, request_data.subject, request_data.chapter)
+            if not url:
+                raise ValueError("Generated URL is empty or invalid.")
+            
+            # Download the PDF
+            response = requests.get(url)
+            response.raise_for_status()
 
+             # Save the PDF
+            with open(f"{filename}.pdf", 'wb') as file:
+                file.write(response.content)
+            # Read the PDF
+            reader = PdfFileReader(BytesIO(response.content))
+
+           
+            
+
+            # Extract the text
+            for page in range(reader.getNumPages()):
+                text += reader.getPage(page).extractText()
+            
+            # Save the PDF as a text file
+            with open(f"{filename}.txt", 'w') as file:
+                file.write(text)
+            return {"content": text}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+        return {"content": f"{str(e)}"}
     
-    return {"content": text}
 
 @app.get('/')
 def home():

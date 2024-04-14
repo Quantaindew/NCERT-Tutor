@@ -12,16 +12,12 @@ from pydantic import BaseModel
 agent = Agent(
     name="Question System", 
     seed="your_agent_seed_hereasdasdasdas", 
-    port=8003, 
-    endpoint="http://localhost:8003/submit"
+    port=8005, 
+    endpoint="http://localhost:8005/submit"
     )
-class SharedLinkResponse(BaseModel):
-    secure_url: str
 
 class Response(Model):
-    summary: str
-    question_bank: str
-    answer_key: str
+    text : str
     sender : str
 
 # Define Protocol for question reading system
@@ -36,25 +32,25 @@ async def startup(ctx: Context):
 
 
 
-def send_shared_link_data(data: Response) -> str:
-    url = 'https://ncert-tutor-dev-dbkt.3.us-1.fl0.io/sharedlink'
-    response = requests.post(url, json=data.dict())
+# def send_shared_link_data(data: Response) -> str:
+#     url = 'http://localhost:8080/sharedlink'
+#     response = requests.post(url, json=data.dict())
 
-    if response.status_code == 200:
-        return response.json()
-    else:
-        return None
+#     if response.status_code == 200:
+#         return response.json()
+#     else:
+#         return None
 
    
 # Define a handler for the Question system protocol
 @end_protocol.on_message(model=Response, replies = UAgentResponse)
 async def on_question_request(ctx: Context,sender: str, msg: Response):
-    url = send_shared_link_data(msg)
-    if url is not None:
-        message = f'{msg.summary}\n{msg.question_bank}\n<a href={url}>'
-    else:
-        message = f'{msg.summary}\n{msg.question_bank}\n{msg.answer_key}'
-    
+    # url = send_shared_link_data(msg)
+    # if url is not None:
+    #     message = f'{msg.summary}\n{msg.question_bank}\n<a href={url}>'
+    # else:
+    #     message = f'{msg.summary}\n{msg.question_bank}\n{msg.answer_key}'
+    message = f'{msg.text}'
 
     #Printing the question response on logger
     ctx.logger.info(f"Received question request from {sender}")

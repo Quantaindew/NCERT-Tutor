@@ -112,8 +112,6 @@
         {"name": "128", "number": 128}
     ]
 },
-
-
 {
     "standard": 5,
     "subject": "english",
@@ -484,7 +482,7 @@
         {"name": "control and coordination", "number": 106},
         {"name": "how do organisms reproduce?", "number": 107},
         {"name": "heredity", "number": 108},
-        {"name": "light - reflection and refraction", "number": 109},
+        {"name": "light – reflection and refraction", "number": 109},
         {"name": "the human eye and the colourful world", "number": 110},
         {"name": "electricity", "number": 111},
         {"name": "magnetic effects of electric current", "number": 112},
