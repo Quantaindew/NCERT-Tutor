@@ -1,4 +1,4 @@
-ncert =[{
+ncert_data =[{
     "standard": 1,
     "subject": "english",
     "chapters": [
