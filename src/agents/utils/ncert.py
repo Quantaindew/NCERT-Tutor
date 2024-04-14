@@ -4,6 +4,7 @@ import re
 
 import os
 from pydantic import BaseModel
+from uagents import Model
 from fastapi import FastAPI, HTTPException
 import requests
 from PyPDF4 import PdfFileReader
@@ -18,17 +19,16 @@ with open('ncert.json') as f:
 
 app = FastAPI()
 
-class Request(BaseModel):
+class Summary(Model):
     standard: int
     subject: str
     chapter: int
 
 
-class SharedLinkInput(BaseModel):
+class SharedLinkInput(Model):
     summary: str
     question_bank: str
     answer_key: str
-    sender : str
 
 def generate_url(class_num, subject, chapter_num, is_pdf=True):
     class_mapping = {9: 'ie', 10: 'je',8:'he',7:'ge',6:'fe',5:'ee',4:'de',3:'ce',2:'be',1:'ae'}
@@ -68,7 +68,7 @@ def generate_url(class_num, subject, chapter_num, is_pdf=True):
 
 
 @app.post('/send-pdf-content')
-async def generate_url_api(request_data: Request):
+async def generate_url_api(request_data: Summary):
     try:
         text = ""
         filename = f"./cache/{generate_url(request_data.standard, request_data.subject, request_data.chapter, False)}"
