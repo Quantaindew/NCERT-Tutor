@@ -8,14 +8,15 @@ import requests
 from uagents import Model, Protocol, Agent, Context
 from ai_engine import UAgentResponse, UAgentResponseType
 import json
+from ncertagent import send_pdf_content
 from ncert import ncert
 from uagents.setup import fund_agent_if_low
 
-AGENT_MAILBOX_KEY = "27c18025-e678-4c1e-840a-cff1d6e969d1"
+AGENT_MAILBOX_KEY="99a95410-3607-41fe-8d42-c14c8b356b11"
 
 agent = Agent(
     name="Question System", 
-    seed="your_agentdsfdsf_seed_here", 
+    seed="your_agenasdasdasdastdsfdsf_seed_here", 
     port=8000, 
     endpoint="http://localhost:8020/submit",
     mailbox=f"{AGENT_MAILBOX_KEY}@https://agentverse.ai"
@@ -28,7 +29,7 @@ class Question(Model):
     chapter: int
     subject: str
     standard: int
-    sender : str
+
 
 class Inputmod(Model):
     question : str
@@ -101,8 +102,9 @@ async def startup(ctx: Context):
     chapter_num = find_chapter_number(chapter_name)
     standard = 4
     ctx.logger.info(f"Chapter Name : {chapter_name}, Chapter number: {chapter_num}, standard: {standard}")
+    #message = send_pdf_content(ctx,agent.address, Question(question = f"Can you provide a summary of the chapter {chapter_name} from standard {standard} English?", chapter = chapter_num, subject = "english", standard = standard))
     
-    await ctx.send("agent1qvwqu6a0km09mq4f6j6kmke9smswmgcergmml9a54av9449rqtmmxy4qwe6", Question(question = f"Can you provide a summary of the chapter {chapter_name} from standard {standard} English?", chapter = chapter_num, subject = "english", standard = standard, sender = agent.address))
+    #await ctx.send("agent1qvwqu6a0km09mq4f6j6kmke9smswmgcergmml9a54av9449rqtmmxy4qwe6", Question(question = f"Can you provide a summary of the chapter {chapter_name} from standard {standard} English?", chapter = chapter_num, subject = "english", standard = standard))
     
 # Define a handler for the Question system protocol
 @question_protocol.on_message(model=Inputmod, replies = UAgentResponse)
@@ -111,10 +113,10 @@ async def on_question_request(ctx: Context, sender: str, msg: Inputmod):
     chapter = find_chapter_number(msg.chapter)
     ctx.logger.info(f"Received question request from {sender}")
     ctx.logger.info(f"Question: {msg.question}, Chapter: {chapter}, Subject: {msg.subject}, Standard: {msg.standard}")
-    await ctx.send("agent1q26wap4wv5fwteg3y6zkcnsxgg9argekfmcp2z2fdv9dek5xrkhu2e5z8zu", Question(question = msg.question, chapter = msg.chapter, subject = msg.subject, standard = msg.standard, sender = sender))
+    message = send_pdf_content(ctx, sender, Question(question = msg.question, chapter = chapter, subject = msg.subject, standard = msg.standard))
     #Creating hyperlink and sending final response to the DeltaV GUI
-    message = f"you asked for help with chapter: {msg.chapter} from {msg.standard} in {msg.subject}"
-    await ctx.send(sender, UAgentResponse(message = 'Hmm...', type = UAgentResponseType.FINAL))
+    ctx.logger.info(f"Final Message: {message}")
+    await ctx.send(sender, UAgentResponse(message = message, type = UAgentResponseType.FINAL))
  
  
  
