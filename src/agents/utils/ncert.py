@@ -24,7 +24,6 @@ class Request(BaseModel):
     chapter: int
 
 
-
 class SharedLinkInput(BaseModel):
     summary: str
     question_bank: str
@@ -66,7 +65,7 @@ def generate_url(class_num, subject, chapter_num):
 
 
 @app.post('/send-pdf-content')
-def generate_url_api(request_data: Request):
+async def generate_url_api(request_data: Request):
     try:
         url = generate_url(request_data.standard, request_data.subject, request_data.chapter)
         if not url:
