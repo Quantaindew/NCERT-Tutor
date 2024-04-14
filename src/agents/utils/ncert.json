@@ -51,29 +51,31 @@
         {"name": "chandrayaan", "number": 113}
     ]
 },
+
+
 {
     "standard": 4,
     "subject": "english",
     "chapters": [
         {"name": "wake up!", "number": 101},
-        {"name": "neha's alarm clock", "number": 102},
-        {"name": "noses", "number": 103},
-        {"name": "the little fir tree", "number": 104},
-        {"name": "run!", "number": 105},
-        {"name": "nasruddin's aim", "number": 106},
-        {"name": "why?", "number": 107},
-        {"name": "alice in wonderlamd", "number": 108},
-        {"name": "don't be afraid of the dark", "number": 109},
-        {"name": "helen keller", "number": 110},
-        {"name": "hiawatha", "number": 111},
-        {"name": "the scholar's mother tongue", "number": 112},
-        {"name": "a watering rhyme", "number": 113},
-        {"name": "the giving tree", "number": 114},
-        {"name": "the donkey", "number": 115},
-        {"name": "books", "number": 116},
-        {"name": "going to buy a book", "number": 117},
-        {"name": "The naughty Boy", "number": 118},
-        {"name": "pinocchio", "number": 119}
+        {"name": "neha's alarm clock", "number": 101},
+        {"name": "noses", "number": 102},
+        {"name": "the little fir tree", "number": 102},
+        {"name": "run!", "number": 103},
+        {"name": "nasruddin's aim", "number": 103},
+        {"name": "why?", "number": 104},
+        {"name": "alice in wonderland", "number": 104},
+        {"name": "don't be afraid of the dark", "number": 105},
+        {"name": "helen keller", "number": 105},
+        {"name": "hiawatha", "number": 106},
+        {"name": "the scholar's mother tongue", "number": 106},
+        {"name": "a watering rhyme", "number": 107},
+        {"name": "the giving tree", "number": 107},
+        {"name": "the donkey", "number": 107},
+        {"name": "books", "number": 108},
+        {"name": "going to buy a book", "number": 108},
+        {"name": "The naughty Boy", "number": 109},
+        {"name": "pinocchio", "number": 109}
     ]
 },
 {
@@ -480,7 +482,7 @@
         {"name": "control and coordination", "number": 106},
         {"name": "how do organisms reproduce?", "number": 107},
         {"name": "heredity", "number": 108},
-        {"name": "light – reflection and refraction", "number": 109},
+        {"name": "light - reflection and refraction", "number": 109},
         {"name": "the human eye and the colourful world", "number": 110},
         {"name": "electricity", "number": 111},
         {"name": "magnetic effects of electric current", "number": 112},
