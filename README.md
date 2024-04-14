@@ -104,7 +104,7 @@ cd src/uagents/conversation
 poetry shell
 python question.py
 ```
-reminder: for the conversation agent demo to run locally , you will need to uncomment the hardcoded query 👇
+reminder: for the conversation agent demo to run locally , you will need to uncomment the hardcoded query 👇 in the ``` question.py``` file .
 ``` python
 @agent.on_event("startup")
 async def startup(ctx: Context):
