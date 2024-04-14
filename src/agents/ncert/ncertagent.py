@@ -19,12 +19,14 @@ class Text(Model):
     standard: str
     sender : str
 
+AGENT_MAILBOX_KEY = "82d392e6-bd87-4402-9170-1b3557270c3b"
 
 ncert = Agent(
     name="ncert",
     port=8001,
     seed="sigmar secret phrase",
     endpoint=["http://127.0.0.1:8001/submit"],
+    mailbox=f"{AGENT_MAILBOX_KEY}@https://agentverse.ai"
 )
 
 fund_agent_if_low(ncert.wallet.address())

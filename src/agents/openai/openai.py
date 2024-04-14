@@ -19,6 +19,7 @@ HEADERS = {
     "Authorization": f"Bearer {OPENAI_API_KEY}"
 }
 
+AGENT_MAILBOX_KEY = "ec9b612e-0612-4ec3-af5e-dc234f0644b6"
 
 
 agent = Agent(
@@ -26,6 +27,7 @@ agent = Agent(
     seed="your_agent_seed_hereasdasda",
     port=8007,
     endpoint=["http://127.0.0.1:8007/submit"],
+    mailbox=f"{AGENT_MAILBOX_KEY}@https://agentverse.ai"
 )
 
 fund_agent_if_low(agent.wallet.address())
@@ -127,9 +129,6 @@ def send_shared_link_data(data: Summary) -> str:
 async def startup(ctx: Context):
     ctx.logger.info("OpenAI Agent Started")
     ctx.logger.info(f"{agent.address}")
-    sender="agent1qwf80s0dqxcy6vqr2qlsyhg0jmartqvgcg70s6zr4d0rzm2te05a7fy5dy9"
-   
-
 
 
 # Message handler for data requests sent to this agent
@@ -147,12 +146,14 @@ async def handle_request(ctx: Context, sender: str, request: Text):
     msg = Summary(summary = data["summary"], question_bank = data["question_bank"], answer_key = data["answer_key"], sender = request.sender)
     url = send_shared_link_data(msg)
     if url is not None:
-        message = f'{msg.summary}\n{msg.question_bank}\n<a href={url}>'
+        hello = "The end"
+        message = f'{msg.summary}\n{msg.question_bank}\n<a href="{url}">Link to answers</a>'
     else:
         message = f'{msg.summary}\n{msg.question_bank}\n{msg.answer_key}'
     
 
     sender="agent1qwf80s0dqxcy6vqr2qlsyhg0jmartqvgcg70s6zr4d0rzm2te05a7fy5dy9"
+    #sender="agent1qwf3e6eahspvtxxjt9adrewa8s9zc6e54srkfrd4wdavc6gy4zy9665h5m7"
     await ctx.send(sender, Response(text = message, sender = request.sender))
 
     return

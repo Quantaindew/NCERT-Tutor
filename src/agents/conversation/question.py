@@ -11,14 +11,16 @@ import json
 from ncert import ncert
 from uagents.setup import fund_agent_if_low
 
-
+AGENT_MAILBOX_KEY = "27c18025-e678-4c1e-840a-cff1d6e969d1"
 
 agent = Agent(
     name="Question System", 
-    seed="your_agent_seed_here", 
+    seed="your_agentdsfdsf_seed_here", 
     port=8000, 
-    endpoint="http://localhost:8020/submit"
+    endpoint="http://localhost:8020/submit",
+    mailbox=f"{AGENT_MAILBOX_KEY}@https://agentverse.ai"
     )
+
 
 # Define Question Reading Model
 class Question(Model):
@@ -103,7 +105,6 @@ async def startup(ctx: Context):
     await ctx.send("agent1qvwqu6a0km09mq4f6j6kmke9smswmgcergmml9a54av9449rqtmmxy4qwe6", Question(question = f"Can you provide a summary of the chapter {chapter_name} from standard {standard} English?", chapter = chapter_num, subject = "english", standard = standard, sender = agent.address))
     
 # Define a handler for the Question system protocol
-
 @question_protocol.on_message(model=Inputmod, replies = UAgentResponse)
 async def on_question_request(ctx: Context, sender: str, msg: Inputmod):
     #Printing the question response on logger
