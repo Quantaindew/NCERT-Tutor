@@ -104,5 +104,18 @@ cd src/uagents/conversation
 poetry shell
 python question.py
 ```
+reminder: for the conversation agent demo to run locally , you will need to uncomment the hardcoded query 👇
+``` python
+@agent.on_event("startup")
+async def startup(ctx: Context):
+    ctx.logger.info("Question System Agent Started")
+    ctx.logger.info(f"{agent.address}")
+    await #ctx.send("agent1qvwqu6a0km09mq4f6j6kmke9smswmgcergmml9a54av9449rqtmmxy4qwe6", Question(question = "Can you provide a summary of the chapter 'colors' from standard 3 English?", chapter = 101, subject = "english", standard = 3, sender = agent.address))
+    
+# uncomment this ☝️ query to run the demo locally.
+
+```
+
+
 
 Run the above commands in order in different terminals
