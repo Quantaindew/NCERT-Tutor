@@ -108,7 +108,7 @@ def home():
 
 
 @app.post('/sharedlink')
-def generate_shared_link(data: SharedLinkInput):
+async def generate_shared_link(data: SharedLinkInput):
     # Create the HTML content
     # Replace '?' in question_bank with '?<br>' for new lines
     question_bank = re.sub(r'\?', '?<br>', data.question_bank)
