@@ -98,10 +98,10 @@ async def startup(ctx: Context):
 
     ##Local Testing code snippet, uncomment the code below to run locally
     #intentionally added typo to test levenshtien distance algorithm
-    chapter_name = "alice in wonland"
-    chapter_num = find_chapter_number(chapter_name)
-    standard = 4
-    ctx.logger.info(f"Chapter Name : {chapter_name}, Chapter number: {chapter_num}, standard: {standard}")
+    #chapter_name = "alice in wonland"
+    #chapter_num = find_chapter_number(chapter_name)
+    #standard = 4
+    #ctx.logger.info(f"Chapter Name : {chapter_name}, Chapter number: {chapter_num}, standard: {standard}")
     #message = send_pdf_content(ctx,agent.address, Question(question = f"Can you provide a summary of the chapter {chapter_name} from standard {standard} English?", chapter = chapter_num, subject = "english", standard = standard))
     
     #await ctx.send("agent1qvwqu6a0km09mq4f6j6kmke9smswmgcergmml9a54av9449rqtmmxy4qwe6", Question(question = f"Can you provide a summary of the chapter {chapter_name} from standard {standard} English?", chapter = chapter_num, subject = "english", standard = standard))
