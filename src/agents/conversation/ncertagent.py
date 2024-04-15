@@ -68,7 +68,7 @@ def levenshtein_distance(s1, s2):
 
 def find_chapter_number(chapter_name):# Define the correct path to your JSON file
 
-    data = ncert
+    data = ncert_data
     
     min_distance = float('inf')
     closest_match = None
@@ -97,23 +97,25 @@ async def startup(ctx: Context):
     ctx.logger.info(f"{agent.address}")
 
     ##Local Testing code snippet, uncomment the code below to run locally
-    #intentionally added typo to test levenshtien distance algorithm
-    #chapter_name = "alice in wonland"
-    #chapter_num = find_chapter_number(chapter_name)
-    #standard = 4
-    #ctx.logger.info(f"Chapter Name : {chapter_name}, Chapter number: {chapter_num}, standard: {standard}")
-    #message = send_pdf_content(ctx,agent.address, Question(question = f"Can you provide a summary of the chapter {chapter_name} from standard {standard} English?", chapter = chapter_num, subject = "english", standard = standard))
-    
-    #await ctx.send("agent1qvwqu6a0km09mq4f6j6kmke9smswmgcergmml9a54av9449rqtmmxy4qwe6", Question(question = f"Can you provide a summary of the chapter {chapter_name} from standard {standard} English?", chapter = chapter_num, subject = "english", standard = standard))
-    
+    ##intentionally added typo to test levenshtien distance algorithm
+    chapter_name = "alice in wonland"
+    chapter_num = find_chapter_number(chapter_name)
+    standard = 4
+    ctx.logger.info(f"Chapter Name : {chapter_name}, Chapter number: {chapter_num}, standard: {standard}")
+    message = await send_pdf_content(ctx,agent.address, Question(question = f"Can you provide a summary of the chapter {chapter_name} from standard {standard} English?", chapter = chapter_num, subject = "english", standard = standard))
+  
 # Define a handler for the Question system protocol
 @question_protocol.on_message(model=Inputmod, replies = UAgentResponse)
 async def on_question_request(ctx: Context, sender: str, msg: Inputmod):
     #Printing the question response on logger
+    if msg.question:
+        question= msg.question
+    else:
+        question = "Can you provide a summary of the chapter"
     chapter = find_chapter_number(msg.chapter)
     ctx.logger.info(f"Received question request from {sender}")
-    ctx.logger.info(f"Question: {msg.question}, Chapter: {chapter}, Subject: {msg.subject}, Standard: {msg.standard}")
-    message = send_pdf_content(ctx, sender, Question(question = msg.question, chapter = chapter, subject = msg.subject, standard = msg.standard))
+    ctx.logger.info(f"Question: {question}, Chapter: {chapter}, Subject: {msg.subject}, Standard: {msg.standard}")
+    message = await send_pdf_content(ctx, sender, Question(question = msg.question, chapter = chapter, subject = msg.subject, standard = msg.standard))
     #Creating hyperlink and sending final response to the DeltaV GUI
     ctx.logger.info(f"Final Message: {message}")
     await ctx.send(sender, UAgentResponse(message = message, type = UAgentResponseType.FINAL))

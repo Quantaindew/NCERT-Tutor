@@ -45,8 +45,7 @@ For a closer look at our project and its potential, please refer to the attached
 ### Links for Further Exploration
 
 - Video Demo: [Watch Here](https://drive.google.com/drive/folders/175eGJjyQfFjJ36Qk0ACPx_CXWFQbdVnE?usp=drive_link)
-- Project Presentation: [View Presentation](https://drive.google.com/file/d/1WZ_CiAbCPbJSSWeq6VmxXqZURk6ZH0Xh/view?usp=sharing)
-
+- Project Presentation: [View Presentation](https://drive.google.com/drive/folders/1r4pfuj_JTewEugUCTG1PW8giDpIhO7qm?usp=drive_link)
 We look forward to your valuable insights and suggestions. Together, let's shape the future of education.
 
 Thank you for considering NCERT Tutor as an addition to your platform.

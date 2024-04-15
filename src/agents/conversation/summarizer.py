@@ -23,7 +23,7 @@ class Text(Model):
 
 
 
-def send_pdf_content(ctx: Context, sender :str, query: Question):
+async def send_pdf_content(ctx: Context, sender :str, query: Question):
     if query.question and query.chapter and query.subject and query.standard:
         ctx.logger.info(f"Question received: {query.question} {query.chapter} {query.subject} {query.standard}")
 
@@ -43,7 +43,6 @@ def send_pdf_content(ctx: Context, sender :str, query: Question):
         }
         response = requests.post(api_url, json=payload, headers=headers)
         data = response.json()["content"]
-        sender = "agent1qgpldhjj7vsp25xvnm7muw0dulzvhugf8pvpehaza82j4cw6dmc22x0m8y2"
         ctx.logger.info(f'{data}')
         
         request = Text(pdf=data, success=True, question=query.question, chapter=query.chapter, subject=query.subject, standard=query.standard)
@@ -62,7 +61,7 @@ def send_pdf_content(ctx: Context, sender :str, query: Question):
         url = send_shared_link_data(msg)
         if url is not None:
             message = f'{msg.summary}\n{msg.question_bank}\n<a href="{url}">Link to answers</a>'
-           # ctx.logger.info(message)
+            ctx.logger.info(message)
         else:
             message = f'{msg.summary}\n{msg.question_bank}\n{msg.answer_key}'
         return message
